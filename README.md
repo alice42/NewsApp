@@ -6,7 +6,7 @@
 ## Installation
 
 ```bash
-git clone https://github.com/alice42/Blocs-Cie.git && cd Blocs-Cie
+git clone https://github.com/alice42/myapp.git && cd myapp
 npm run setup
 ```
 
