@@ -21,8 +21,12 @@ const App = props => {
             <Redirect to="/auth" />
           </Route>
           <Route exact path={'/auth'} component={AuthConnected} />
-          <Route path={'/home'} component={HomeConnected} />
-          <Redirect to="/" />
+          <Route exact path={'/home'} component={HomeConnected} />
+          {props.user.username || username ? (
+            <Redirect to="/home" />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Switch>
       </BrowserRouter>
     </StylesProvider>

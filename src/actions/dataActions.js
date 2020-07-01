@@ -8,6 +8,8 @@ export const SEARCH_ERROR = 'SEARCH_ERROR'
 
 export const UPDATE_DATA = 'UPDATE_DATA'
 
+export const UPDATE_SORT_DATE = 'UPDATE_SORT_DATE'
+
 export const dataRequest = country => ({
   type: DATA_REQUEST,
   country
@@ -23,4 +25,9 @@ export const updateData = (newData, dataType) => ({
   type: UPDATE_DATA,
   newData,
   dataType
+})
+
+export const updateSortDate = sortBy => ({
+  type: UPDATE_SORT_DATE,
+  sortBy
 })

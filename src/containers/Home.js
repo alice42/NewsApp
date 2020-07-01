@@ -1,7 +1,7 @@
 import React from 'react'
 import theme from '../theme'
 import { StyledContainer } from './styles/StyledHome'
-
+import countries from '../country.json'
 import Header from '../components/Home/Header'
 import DefaultContent from '../components/Home/Content'
 
@@ -11,6 +11,7 @@ const Home = props => {
   const [search, setSearch] = React.useState('')
   const [page, setPage] = React.useState(1)
   const [country, setCountry] = React.useState('fr')
+  const [date, setDate] = React.useState('recent')
 
   React.useEffect(() => {
     if (!props.data.articles) props.dataActions.dataRequest(country)
@@ -19,16 +20,29 @@ const Home = props => {
   React.useEffect(
     () => {
       const query = new URLSearchParams(props.location.search)
+      console.log(props.location.search)
       const search = query.get('search')
-      if (props.history.location.search && search) {
+      const paramCountry = query.get('country')
+      if (
+        !props.data.articlesSearch &&
+        props.history.location.search &&
+        search
+      ) {
         const page = query.get('page') || 1
         setSearch(search)
         setPage(page)
         props.dataActions.search(search, page)
       }
+      if (paramCountry) {
+        const validValue = countries.hasOwnProperty(paramCountry)
+          ? paramCountry
+          : 'fr'
+        setCountry(validValue)
+      }
     },
     [search, setSearch],
-    [page, setPage]
+    [page, setPage],
+    [country, setCountry]
   )
 
   const handleHideArticle = (articleToHide, dataType) => {
@@ -58,8 +72,9 @@ const Home = props => {
 
   const handleSubmitSearch = () => {
     if (search) {
+      const formerCountryParams = country ? `&country=${country}` : ''
       props.history.push({
-        search: `?search=${search}`
+        search: `?search=${search}${formerCountryParams}`
       })
       props.dataActions.search(search)
     }
@@ -72,29 +87,51 @@ const Home = props => {
   const handleChangePage = (event, value) => {
     setPage(value)
     if (search) {
+      const formerCountryParams = country ? `&country=${country}` : ''
       props.history.push({
-        search: `?search=${search}&page=${value}`
+        search: `?search=${search}&page=${value}${formerCountryParams}`
       })
+      window.scrollTo(0, 0)
       props.dataActions.search(search, value)
     }
   }
 
   const handleChangeCountry = e => {
-    props.dataActions.dataRequest(e.target.value)
-    setCountry(e.target.value)
+    const query = new URLSearchParams(props.location.search)
+    const search = query.get('search')
+    const validValue = countries.hasOwnProperty(e.target.value)
+      ? e.target.value
+      : 'fr'
+    props.dataActions.dataRequest(validValue)
+    setCountry(validValue)
+    const formerSearchParams = search ? `&search=${search}` : ''
+    props.history.push({
+      search: `?country=${validValue}${formerSearchParams}`
+    })
   }
+
+  const handleChangeDate = e => {
+    const validValue =
+      e.target.value === 'recent' || e.target.value === 'former'
+        ? e.target.value
+        : 'recent'
+    props.dataActions.updateSortDate()
+    setDate(validValue)
+  }
+
   return (
     <StyledContainer maxWidth="lg" themespacing={theme.spacing(4)} spacing={4}>
       <Header
         theme={theme}
-        handleLogout={handleLogout}
-        handleClose={handleClose}
-        handleMenu={handleMenu}
         open={open}
         anchorEl={anchorEl}
         user={props.user}
+        handleLogout={handleLogout}
+        handleClose={handleClose}
+        handleMenu={handleMenu}
       />
       <DefaultContent
+        date={date}
         country={country}
         page={page}
         search={search}
@@ -102,11 +139,13 @@ const Home = props => {
         articles={props.data.articles}
         articlesSearch={props.data.articlesSearch}
         totalarticlesSearch={props.data.totalarticlesSearch}
+        totalarticles={props.data.totalarticles}
         handleHideArticle={handleHideArticle}
         handleChange={handleChange}
         handleChangePage={handleChangePage}
         handleSubmitSearch={handleSubmitSearch}
         handleChangeCountry={handleChangeCountry}
+        handleChangeDate={handleChangeDate}
       />
     </StyledContainer>
   )

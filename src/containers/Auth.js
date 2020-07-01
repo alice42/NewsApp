@@ -33,6 +33,12 @@ const Auth = props => {
     setUser({ ...user, [name]: value })
   }
 
+  const handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      handleSubmit()
+    }
+  }
+
   return (
     <StyledContainer maxWidth="xs" themespacing={theme.spacing(8)}>
       <StyledAvatar
@@ -44,7 +50,10 @@ const Auth = props => {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <StyledFormContainer themespacing={theme.spacing(1)}>
+      <StyledFormContainer
+        themespacing={theme.spacing(1)}
+        onKeyPress={e => handleKeyPress(e)}
+      >
         <TextField
           type="text"
           name="identifiant"

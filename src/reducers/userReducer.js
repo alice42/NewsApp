@@ -1,10 +1,7 @@
 import {
   AUTH_SUCCESS,
   AUTH_ERROR,
-  INFO_SUCCESS,
-  INFO_ERROR,
-  LOGOUT_SUCCESS,
-  LOGOUT_ERROR
+  LOGOUT_SUCCESS
 } from '../actions/userActions'
 
 const initialState = {
@@ -23,7 +20,7 @@ const reducer = (state = initialState, action) => {
     case AUTH_ERROR:
       return {
         ...state,
-        error: action.data
+        error: action.message
       }
     case LOGOUT_SUCCESS:
       return initialState

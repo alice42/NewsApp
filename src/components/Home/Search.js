@@ -1,18 +1,25 @@
 import React from 'react'
-import theme from '../../theme'
 import { TextField } from '@material-ui/core'
-import { Button } from '@material-ui/core'
 import ArticleCard from './ArticleCard'
 import { Grid } from '@material-ui/core'
-import { StyledPaper } from './styles/StyledContent'
+import {
+  StyledPaper,
+  StyledSearch,
+  StyledCardContainer,
+  StyledTitle
+} from './styles/StyledContent'
 import Pagination from '@material-ui/lab/Pagination'
+import TotalResults from './TotalResults'
 
 const Search = props => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <StyledPaper>
-          <h2>Find Articles</h2>
+          <StyledTitle>
+            <h2>Find Articles</h2>
+            <TotalResults results={props.totalarticlesSearch} />
+          </StyledTitle>
           <TextField
             type="text"
             name="search"
@@ -28,41 +35,15 @@ const Search = props => {
             fullWidth
             autoComplete="search"
             autoFocus
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                props.handleSubmitSearch()
+              }
+            }}
           />
-          <Button
-            type="submit"
-            fullWidth
-            palette={theme.palette}
-            themespacing={theme.spacing(3, 0, 2)}
-            onClick={() => props.handleSubmitSearch()}
-          >
-            Go!
-          </Button>
           {props.articlesSearch && (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
-              }}
-            >
-              {props.totalarticlesSearch > 0 ? (
-                <div>
-                  Total Results:{' '}
-                  {props.totalarticlesSearch > 100
-                    ? 100
-                    : props.totalarticlesSearch}
-                </div>
-              ) : (
-                <div> No Results, try something else :)</div>
-              )}
-              <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center'
-                }}
-              >
+            <StyledSearch>
+              <StyledCardContainer>
                 {props.articlesSearch.map((article, index) => {
                   return (
                     <ArticleCard
@@ -74,7 +55,7 @@ const Search = props => {
                     />
                   )
                 })}
-              </div>
+              </StyledCardContainer>
               {props.totalarticlesSearch > 0 && (
                 <Pagination
                   page={Number(props.page)}
@@ -86,7 +67,7 @@ const Search = props => {
                   onChange={props.handleChangePage}
                 />
               )}
-            </div>
+            </StyledSearch>
           )}
         </StyledPaper>
       </Grid>

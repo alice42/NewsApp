@@ -5,9 +5,7 @@ import {
   DATA_ERROR,
   SEARCH_REQUEST,
   SEARCH_SUCCESS,
-  SEARCH_ERROR,
-  UPDATE_COUNTRY,
-  updateCountry
+  SEARCH_ERROR
 } from '../actions/dataActions'
 import { dataMethod, searchMethod } from '../services/dataServices'
 
@@ -16,6 +14,7 @@ function* data(action) {
     const { country } = action
     const response = yield call(dataMethod, country)
     if (response.status === 200) {
+      console.log(JSON.parse(response.data))
       yield put({
         type: DATA_SUCCESS,
         result: {

@@ -9,7 +9,11 @@ import {
 } from './utils'
 
 export const dataMethod = country =>
-  basicFetch('GET', `${api}${headLines}${fromCountry}${country}${apiKey}`, {})
+  basicFetch(
+    'GET',
+    `${api}${headLines}${fromCountry}${country}&pageSize=100${apiKey}`,
+    {}
+  )
 
 export const searchMethod = ({ search, page }) =>
   basicFetch(
