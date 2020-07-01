@@ -21,6 +21,9 @@ class Auth extends Component {
     if (identifiant === 'user' && password === 'user') {
       window.sessionStorage.setItem('user', identifiant)
       this.props.userActions.authRequestValid({ identifiant, password })
+      this.props.history.push({
+        pathname: `/home`
+      })
     } else this.props.userActions.authRequestError('wrong username or password')
   }
 

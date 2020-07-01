@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { StylesProvider } from '@material-ui/core/styles'
-
+import { useHistory } from 'react-router-dom'
 import * as userActions from '../actions/userActions'
-
+import * as dataActions from '../actions/dataActions'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Auth from './Auth'
 import Home from './Home'
 
@@ -14,14 +15,18 @@ class App extends Component {
     if (username && !this.props.user.username) {
       this.props.userActions.authRequestValid({ identifiant: username })
     }
-    console.log('props', this.props.user)
     return (
       <StylesProvider injectFirst>
-        {this.props.user && this.props.user.username ? (
-          <HomeConnected />
-        ) : (
-          <AuthConnected />
-        )}
+        <BrowserRouter basename="/">
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/auth" />
+            </Route>
+            <Route exact path={'/auth'} component={AuthConnected} />
+            <Route path={'/home'} component={HomeConnected} />
+            <Redirect to="/" />
+          </Switch>
+        </BrowserRouter>
       </StylesProvider>
     )
   }
@@ -29,14 +34,16 @@ class App extends Component {
 
 const actionsMapDispatchToProps = dispatch => {
   return {
-    userActions: bindActionCreators(userActions, dispatch)
+    userActions: bindActionCreators(userActions, dispatch),
+    dataActions: bindActionCreators(dataActions, dispatch)
   }
 }
 
 const mapStateToProps = state => {
-  const { user } = state
+  const { user, data } = state
   return {
-    user
+    user,
+    data
   }
 }
 
