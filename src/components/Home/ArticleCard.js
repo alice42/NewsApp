@@ -15,10 +15,18 @@ const useStyles = makeStyles({
   }
 })
 
-const Article = props => {
+const ArticleCard = props => {
   const classes = useStyles()
   return (
-    <Card className={classes.root}>
+    <Card
+      className={classes.root}
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+        alignItems: 'strech'
+      }}
+    >
       <CardActionArea>
         <CardMedia
           component="img"
@@ -40,15 +48,11 @@ const Article = props => {
         <Button
           size="small"
           color="primary"
-          onClick={() => props.handleHideArticle(props.article)}
+          onClick={() => props.handleHideArticle(props.article, props.dataType)}
         >
           Hide
         </Button>
-        <Button
-          size="small"
-          color="primary"
-          onClick={() => props.handleReadArticle(props.article)}
-        >
+        <Button href={props.article.url} size="small" color="primary">
           Learn More
         </Button>
       </CardActions>
@@ -56,4 +60,4 @@ const Article = props => {
   )
 }
 
-export default Article
+export default ArticleCard

@@ -1,33 +1,39 @@
 import React from 'react'
-import { Grid } from '@material-ui/core'
-import Article from './Article'
-import { StyledPaper } from './styles/StyledContent'
+import theme from '../../theme'
+import {
+  ThemeMixinsToolBar,
+  StyledMain
+} from '../../containers/styles/StyledHome'
+import HeadLines from './HeadLines'
+import Search from './Search'
 
-const Content = props => {
+const DefaultContent = props => {
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <StyledPaper>
-          <h2>Top 20 Headlines</h2>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            {props.articles.map((article, index) => (
-              <Article
-                key={`article_${index}`}
-                article={article}
-                handleHideArticle={props.handleHideArticle}
-              />
-            ))}
-          </div>
-        </StyledPaper>
-      </Grid>
-    </Grid>
+    <StyledMain>
+      <ThemeMixinsToolBar theme={theme.mixins.toolbar} />
+      <Search
+        page={props.page}
+        search={props.search}
+        history={props.history}
+        articlesSearch={props.articlesSearch}
+        totalarticlesSearch={props.totalarticlesSearch}
+        handleHideArticle={props.handleHideArticle}
+        handleReadArticle={props.handleReadArticle}
+        handleChange={props.handleChange}
+        handleChangePage={props.handleChangePage}
+        handleSubmitSearch={props.handleSubmitSearch}
+        dataType={'articlesSearch'}
+      />
+      {props.articles && (
+        <HeadLines
+          articles={props.articles}
+          handleHideArticle={props.handleHideArticle}
+          handleReadArticle={props.handleReadArticle}
+          dataType={'articles'}
+        />
+      )}
+    </StyledMain>
   )
 }
 
-export default Content
+export default DefaultContent

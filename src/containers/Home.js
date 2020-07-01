@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
 import theme from '../theme'
-import {
-  ThemeMixinsToolBar,
-  StyledContainer,
-  StyledMain
-} from './styles/StyledHome'
+import { StyledContainer } from './styles/StyledHome'
 
 import Header from '../components/Home/Header'
-import Content from '../components/Home/Content'
-import Search from '../components/Home/Search'
+import DefaultContent from '../components/Home/Content'
 
 class Home extends Component {
   state = {
@@ -20,24 +15,23 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    const query = new URLSearchParams(this.props.location.search)
+    const search = query.get('search')
     if (!this.props.data.articles) {
       this.props.dataActions.dataRequest()
     }
-    if (this.props.history.location.search) {
-      const query = new URLSearchParams(this.props.location.search)
-      const search = query.get('search')
+    if (this.props.history.location.search && search) {
       const page = query.get('page') || 1
       this.setState({ search, page })
       this.props.dataActions.search(search, page)
     }
   }
 
-  handleHideArticle = articleToHide => {
-    console.log('articleToHide', articleToHide)
-  }
-
-  handleReadArticle = articleToRead => {
-    console.log('articleToRead', articleToRead)
+  handleHideArticle = (articleToHide, dataType) => {
+    const filteredResults = this.props.data[`${dataType}`].filter(article => {
+      return article.url !== articleToHide.url
+    })
+    this.props.dataActions.updateData(filteredResults, dataType)
   }
 
   handleLogout = () => {
@@ -91,6 +85,10 @@ class Home extends Component {
       this.props.dataActions.search(search, value)
     }
   }
+
+  handleGoBack = () => {
+    this.props.history.goBack()
+  }
   render() {
     return (
       <StyledContainer
@@ -107,27 +105,21 @@ class Home extends Component {
           anchorEl={this.state.anchorEl}
           user={this.props.user}
         />
-
-        <StyledMain>
-          <ThemeMixinsToolBar theme={theme.mixins.toolbar} />
-          <Search
-            page={this.state.page}
-            search={this.state.search}
-            history={this.props.history}
-            articlesSearch={this.props.data.articlesSearch}
-            totalArticlesSearch={this.props.data.totalArticlesSearch}
-            handleHideArticle={this.handleHideArticle}
-            handleChange={this.handleChange}
-            handleChangePage={this.handleChangePage}
-            handleSubmitSearch={this.handleSubmitSearch}
-          />
-          {this.props.data.articles && (
-            <Content
-              articles={this.props.data.articles}
-              handleHideArticle={this.handleHideArticle}
-            />
-          )}
-        </StyledMain>
+        <DefaultContent
+          page={this.state.page}
+          search={this.state.search}
+          history={this.props.history}
+          articlesSearch={this.props.data.articlesSearch}
+          totalarticlesSearch={this.props.data.totalarticlesSearch}
+          handleHideArticle={this.handleHideArticle}
+          handleReadArticle={this.handleReadArticle}
+          handleChange={this.handleChange}
+          handleChangePage={this.handleChangePage}
+          handleSubmitSearch={this.handleSubmitSearch}
+          articles={this.props.data.articles}
+          handleHideArticle={this.handleHideArticle}
+          handleReadArticle={this.handleReadArticle}
+        />
       </StyledContainer>
     )
   }

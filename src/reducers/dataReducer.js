@@ -4,15 +4,16 @@ import {
   DATA_ERROR,
   SEARCH_REQUEST,
   SEARCH_SUCCESS,
-  SEARCH_ERROR
+  SEARCH_ERROR,
+  UPDATE_DATA
 } from '../actions/dataActions'
 import { LOGOUT_SUCCESS } from '../actions/userActions'
 
 const initialState = {
   articles: null,
-  totalArticles: 0,
+  totalarticles: 0,
   articlesSearch: null,
-  totalArticlesSearch: 0,
+  totalarticlesSearch: 0,
   error: null,
   fetching: null
 }
@@ -28,7 +29,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         articles: action.result.data.articles,
-        totalArticles: action.result.data.totalResults,
+        totalarticles: action.result.data.totalResults,
         fetching: false
       }
     case DATA_ERROR:
@@ -46,13 +47,23 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         articlesSearch: action.result.data.articles,
-        totalArticlesSearch: action.result.data.totalResults,
+        totalarticlesSearch:
+          action.result.data.totalResults > 100
+            ? 100
+            : action.result.data.totalResults,
         fetching: false
       }
     case SEARCH_ERROR:
       return {
         ...state,
         error: action.error,
+        fetching: false
+      }
+    case UPDATE_DATA:
+      return {
+        ...state,
+        [`${action.dataType}`]: action.newData,
+        [`total${action.dataType}`]: state[`total${action.dataType}`] - 1,
         fetching: false
       }
     case LOGOUT_SUCCESS:

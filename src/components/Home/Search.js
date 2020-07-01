@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import theme from '../../theme'
 import { TextField } from '@material-ui/core'
 import { Button } from '@material-ui/core'
-import Article from './Article'
+import ArticleCard from './ArticleCard'
 import { Grid } from '@material-ui/core'
 import { StyledPaper } from './styles/StyledContent'
 import Pagination from '@material-ui/lab/Pagination'
@@ -48,15 +48,15 @@ class Search extends Component {
                   alignItems: 'center'
                 }}
               >
-                {this.props.totalArticlesSearch > 0 ? (
+                {this.props.totalarticlesSearch > 0 ? (
                   <div>
                     Total Results:{' '}
-                    {this.props.totalArticlesSearch > 100
+                    {this.props.totalarticlesSearch > 100
                       ? 100
-                      : this.props.totalArticlesSearch}
+                      : this.props.totalarticlesSearch}
                   </div>
                 ) : (
-                  <div> No Results, try something else</div>
+                  <div> No Results, try something else :)</div>
                 )}
                 <div
                   style={{
@@ -67,21 +67,23 @@ class Search extends Component {
                 >
                   {this.props.articlesSearch.map((article, index) => {
                     return (
-                      <Article
+                      <ArticleCard
+                        dataType={this.props.dataType}
                         key={`article_${index}`}
                         article={article}
                         handleHideArticle={this.props.handleHideArticle}
+                        handleReadArticle={this.props.handleReadArticle}
                       />
                     )
                   })}
                 </div>
-                {this.props.totalArticlesSearch > 0 && (
+                {this.props.totalarticlesSearch > 0 && (
                   <Pagination
                     page={Number(this.props.page)}
                     count={
-                      Math.round(this.props.totalArticlesSearch / 20) >= 5
+                      Math.round(this.props.totalarticlesSearch / 20) >= 5
                         ? 5
-                        : Math.ceil(this.props.totalArticlesSearch / 20)
+                        : Math.ceil(this.props.totalarticlesSearch / 20)
                     }
                     onChange={this.props.handleChangePage}
                   />
