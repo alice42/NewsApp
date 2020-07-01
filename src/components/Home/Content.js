@@ -26,10 +26,12 @@ const DefaultContent = props => {
       />
       {props.articles && (
         <HeadLines
+          country={props.country}
           articles={props.articles}
           handleHideArticle={props.handleHideArticle}
           handleReadArticle={props.handleReadArticle}
           dataType={'articles'}
+          handleChangeCountry={props.handleChangeCountry}
         />
       )}
     </StyledMain>

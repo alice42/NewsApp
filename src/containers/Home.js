@@ -1,128 +1,115 @@
-import React, { Component } from 'react'
+import React from 'react'
 import theme from '../theme'
 import { StyledContainer } from './styles/StyledHome'
 
 import Header from '../components/Home/Header'
 import DefaultContent from '../components/Home/Content'
 
-class Home extends Component {
-  state = {
-    open: { user: false, notif: false },
-    anchorEl: { user: null, notif: null },
-    value: 0,
-    search: '',
-    page: 1
-  }
+const Home = props => {
+  const [anchorEl, setAnchorEl] = React.useState({ user: null, notif: null })
+  const [open, setOpen] = React.useState({ user: false, notif: null })
+  const [search, setSearch] = React.useState('')
+  const [page, setPage] = React.useState(1)
+  const [country, setCountry] = React.useState('fr')
 
-  componentDidMount() {
-    const query = new URLSearchParams(this.props.location.search)
-    const search = query.get('search')
-    if (!this.props.data.articles) {
-      this.props.dataActions.dataRequest()
-    }
-    if (this.props.history.location.search && search) {
-      const page = query.get('page') || 1
-      this.setState({ search, page })
-      this.props.dataActions.search(search, page)
-    }
-  }
+  React.useEffect(() => {
+    if (!props.data.articles) props.dataActions.dataRequest(country)
+  }, [country])
 
-  handleHideArticle = (articleToHide, dataType) => {
-    const filteredResults = this.props.data[`${dataType}`].filter(article => {
+  React.useEffect(
+    () => {
+      const query = new URLSearchParams(props.location.search)
+      const search = query.get('search')
+      if (props.history.location.search && search) {
+        const page = query.get('page') || 1
+        setSearch(search)
+        setPage(page)
+        props.dataActions.search(search, page)
+      }
+    },
+    [search, setSearch],
+    [page, setPage]
+  )
+
+  const handleHideArticle = (articleToHide, dataType) => {
+    const filteredResults = props.data[`${dataType}`].filter(article => {
       return article.url !== articleToHide.url
     })
-    this.props.dataActions.updateData(filteredResults, dataType)
+    props.dataActions.updateData(filteredResults, dataType)
   }
 
-  handleLogout = () => {
+  const handleLogout = () => {
     window.sessionStorage.clear()
-    this.props.userActions.logoutRequest()
-    this.props.history.push({
+    props.userActions.logoutRequest()
+    props.history.push({
       pathname: `/`
     })
   }
 
-  handleMenu = (e, type) => {
-    this.setState({
-      open: { ...this.state.open, [`${type}`]: true },
-      anchorEl: { ...this.state.anchorEl, [`${type}`]: e.currentTarget }
-    })
+  const handleMenu = (e, type) => {
+    setAnchorEl({ ...anchorEl, [`${type}`]: e.currentTarget })
+    setOpen({ ...open, [`${type}`]: true })
   }
 
-  handleClose = type => {
-    this.setState({
-      open: { ...this.state.open, [`${type}`]: false },
-      anchorEl: { ...this.state.anchorEl, [`${type}`]: null }
-    })
+  const handleClose = type => {
+    setAnchorEl({ ...anchorEl, [`${type}`]: null })
+    setOpen({ ...open, [`${type}`]: false })
   }
 
-  handleSubmitSearch = () => {
-    const { search } = this.state
+  const handleSubmitSearch = () => {
     if (search) {
-      this.props.history.push({
+      props.history.push({
         search: `?search=${search}`
       })
-      this.props.dataActions.search(search)
+      props.dataActions.search(search)
     }
   }
 
-  handleChange = event => {
-    const value = event.target.value
-    this.setState({
-      search: value
-    })
+  const handleChange = event => {
+    setSearch(event.target.value)
   }
 
-  handleChangePage = (event, value) => {
-    this.setState({
-      page: value
-    })
-    const { search } = this.state
+  const handleChangePage = (event, value) => {
+    setPage(value)
     if (search) {
-      this.props.history.push({
+      props.history.push({
         search: `?search=${search}&page=${value}`
       })
-      this.props.dataActions.search(search, value)
+      props.dataActions.search(search, value)
     }
   }
 
-  handleGoBack = () => {
-    this.props.history.goBack()
+  const handleChangeCountry = e => {
+    props.dataActions.dataRequest(e.target.value)
+    setCountry(e.target.value)
   }
-  render() {
-    return (
-      <StyledContainer
-        maxWidth="lg"
-        themespacing={theme.spacing(4)}
-        spacing={4}
-      >
-        <Header
-          theme={theme}
-          handleLogout={this.handleLogout}
-          handleClose={this.handleClose}
-          handleMenu={this.handleMenu}
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          user={this.props.user}
-        />
-        <DefaultContent
-          page={this.state.page}
-          search={this.state.search}
-          history={this.props.history}
-          articlesSearch={this.props.data.articlesSearch}
-          totalarticlesSearch={this.props.data.totalarticlesSearch}
-          handleHideArticle={this.handleHideArticle}
-          handleReadArticle={this.handleReadArticle}
-          handleChange={this.handleChange}
-          handleChangePage={this.handleChangePage}
-          handleSubmitSearch={this.handleSubmitSearch}
-          articles={this.props.data.articles}
-          handleHideArticle={this.handleHideArticle}
-          handleReadArticle={this.handleReadArticle}
-        />
-      </StyledContainer>
-    )
-  }
+  return (
+    <StyledContainer maxWidth="lg" themespacing={theme.spacing(4)} spacing={4}>
+      <Header
+        theme={theme}
+        handleLogout={handleLogout}
+        handleClose={handleClose}
+        handleMenu={handleMenu}
+        open={open}
+        anchorEl={anchorEl}
+        user={props.user}
+      />
+      <DefaultContent
+        country={country}
+        page={page}
+        search={search}
+        history={props.history}
+        articles={props.data.articles}
+        articlesSearch={props.data.articlesSearch}
+        totalarticlesSearch={props.data.totalarticlesSearch}
+        handleHideArticle={handleHideArticle}
+        handleChange={handleChange}
+        handleChangePage={handleChangePage}
+        handleSubmitSearch={handleSubmitSearch}
+        handleChangeCountry={handleChangeCountry}
+      />
+    </StyledContainer>
+  )
 }
 
 export default Home

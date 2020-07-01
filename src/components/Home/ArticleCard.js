@@ -27,23 +27,21 @@ const ArticleCard = props => {
         alignItems: 'strech'
       }}
     >
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt={props.article.urlToImage}
-          height="140"
-          src={props.article.urlToImage}
-          title={props.article.title}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {props.article.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {props.article.description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+      <CardMedia
+        component="img"
+        alt={props.article.urlToImage}
+        height="140"
+        src={props.article.urlToImage}
+        title={props.article.title}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {props.article.title}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {props.article.description}
+        </Typography>
+      </CardContent>
       <CardActions>
         <Button
           size="small"
@@ -52,7 +50,12 @@ const ArticleCard = props => {
         >
           Hide
         </Button>
-        <Button href={props.article.url} size="small" color="primary">
+        <Button
+          href={props.article.url}
+          target="_blank"
+          size="small"
+          color="primary"
+        >
           Learn More
         </Button>
       </CardActions>

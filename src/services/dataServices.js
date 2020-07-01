@@ -3,13 +3,13 @@ import {
   api,
   headLines,
   everything,
-  country,
+  fromCountry,
   query,
   apiKey
 } from './utils'
 
-export const dataMethod = () =>
-  basicFetch('GET', `${api}${headLines}${country}${apiKey}`, {})
+export const dataMethod = country =>
+  basicFetch('GET', `${api}${headLines}${fromCountry}${country}${apiKey}`, {})
 
 export const searchMethod = ({ search, page }) =>
   basicFetch(
