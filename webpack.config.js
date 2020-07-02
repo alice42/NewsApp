@@ -6,8 +6,7 @@ module.exports = {
   entry: './src/',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'app.bundle.js',
-    publicPath: '/'
+    filename: 'app.bundle.js'
   },
   devServer: {
     historyApiFallback: true
