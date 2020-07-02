@@ -7,12 +7,14 @@ import {
 import HeadLines from './HeadLines'
 import Search from './Search'
 
-const DefaultContent = props => (
+const Content = props => (
   <StyledMain>
     <ThemeMixinsToolBar theme={theme.mixins.toolbar} />
     <Search {...props} dataType={'articlesSearch'} />
-    {props.articles && <HeadLines {...props} dataType={'articles'} />}
+    {(props.articles || props.errorHeadline) && (
+      <HeadLines {...props} dataType={'articles'} />
+    )}
   </StyledMain>
 )
 
-export default DefaultContent
+export default Content

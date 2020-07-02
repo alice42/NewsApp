@@ -3,7 +3,7 @@ import theme from '../theme'
 import { StyledContainer } from './styles/StyledHome'
 import countries from '../country.json'
 import Header from '../components/Home/Header'
-import DefaultContent from '../components/Home/Content'
+import Content from '../components/Home/Content'
 
 const Home = props => {
   const [anchorEl, setAnchorEl] = React.useState({ user: null, notif: null })
@@ -20,7 +20,6 @@ const Home = props => {
   React.useEffect(
     () => {
       const query = new URLSearchParams(props.location.search)
-      console.log(props.location.search)
       const search = query.get('search')
       const paramCountry = query.get('country')
       if (
@@ -130,7 +129,9 @@ const Home = props => {
         handleClose={handleClose}
         handleMenu={handleMenu}
       />
-      <DefaultContent
+      <Content
+        errorSearch={props.data.errorSearch}
+        errorHeadline={props.data.errorHeadline}
         date={date}
         country={country}
         page={page}

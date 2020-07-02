@@ -14,7 +14,6 @@ function* data(action) {
     const { country } = action
     const response = yield call(dataMethod, country)
     if (response.status === 200) {
-      console.log(JSON.parse(response.data))
       yield put({
         type: DATA_SUCCESS,
         result: {
@@ -22,10 +21,7 @@ function* data(action) {
         }
       })
     } else {
-      if (response.status === 404) {
-        response.data = 'Something went wrong'
-      }
-      yield put({ type: DATA_ERROR, error: response.data })
+      yield put({ type: DATA_ERROR, error: JSON.parse(response.data) })
     }
   } catch (error) {
     yield put({ type: DATA_ERROR, error: error.message })
@@ -48,10 +44,7 @@ function* search(action) {
         }
       })
     } else {
-      if (response.status === 404) {
-        response.data = 'Something went wrong'
-      }
-      yield put({ type: SEARCH_ERROR, error: response.data })
+      yield put({ type: SEARCH_ERROR, error: JSON.parse(response.data) })
     }
   } catch (error) {
     yield put({ type: SEARCH_ERROR, error: 'search error' })

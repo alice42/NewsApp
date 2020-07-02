@@ -10,8 +10,19 @@ import {
 } from './styles/StyledContent'
 import Pagination from '@material-ui/lab/Pagination'
 import TotalResults from './TotalResults'
+import Error from '../Error'
 
 const Search = props => {
+  if (props.errorSearch)
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <StyledPaper>
+            <Error message={props.errorSearch} />
+          </StyledPaper>
+        </Grid>
+      </Grid>
+    )
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>

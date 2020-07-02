@@ -15,7 +15,8 @@ const initialState = {
   totalarticles: null,
   articlesSearch: null,
   totalarticlesSearch: null,
-  error: null,
+  errorSearch: null,
+  errorHeadline: null,
   fetching: null
 }
 
@@ -39,7 +40,7 @@ const reducer = (state = initialState, action) => {
     case DATA_ERROR:
       return {
         ...state,
-        error: action.error,
+        errorHeadline: action.error.message,
         fetching: false
       }
     case SEARCH_REQUEST:
@@ -60,7 +61,7 @@ const reducer = (state = initialState, action) => {
     case SEARCH_ERROR:
       return {
         ...state,
-        error: action.error,
+        errorSearch: action.error.message,
         fetching: false
       }
     case UPDATE_DATA:

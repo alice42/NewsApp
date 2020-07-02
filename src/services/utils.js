@@ -4,7 +4,7 @@ export const headLines = 'top-headlines'
 export const everything = 'everything'
 export const query = '?q='
 export const fromCountry = '?country='
-export const apiKey = '&apiKey=2a4085cfd56e4937b2fda28e35b93013'
+export const apiKey = '&apiKey=803fdd9b8517490d89d8c85ade466b8d'
 
 //BASIC FETCH API METHOD
 export const basicFetch = async (method, url, config, data) => {
