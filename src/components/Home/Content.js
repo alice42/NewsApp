@@ -1,16 +1,20 @@
 import React from 'react'
-import { Grid } from '@material-ui/core'
-import { StyledPaper } from './styles/StyledContent'
+import theme from '../../theme'
+import {
+  ThemeMixinsToolBar,
+  StyledMain
+} from '../../containers/styles/StyledHome'
+import HeadLines from './HeadLines'
+import Search from './Search'
 
-const Content = props => {
-  const url = window.location.href
-  return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <StyledPaper>A</StyledPaper>
-      </Grid>
-    </Grid>
-  )
-}
+const Content = props => (
+  <StyledMain>
+    <ThemeMixinsToolBar theme={theme.mixins.toolbar} />
+    <Search {...props} dataType={'articlesSearch'} />
+    {(props.articles || props.errorHeadline) && (
+      <HeadLines {...props} dataType={'articles'} />
+    )}
+  </StyledMain>
+)
 
 export default Content
