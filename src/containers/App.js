@@ -21,9 +21,8 @@ const App = props => {
             <Redirect to="/auth" />
           </Route>
           <Route exact path={'/auth'} component={AuthConnected} />
-          <Route exact path={'/home'} component={HomeConnected} />
           {props.user.username || username ? (
-            <Redirect to="/home" />
+            <Route exact path={'/home'} component={HomeConnected} />
           ) : (
             <Redirect to="/" />
           )}
